@@ -1,10 +1,10 @@
 {
-  "name": "cocos-to-playable-ad",
+  "name": "cocos-webpage-packing",
   "version": "1.0.0",
   "description": "将 Cocos Creator 构建得到的移动端网页、脚本、资源封装为单个 HTML 文件。",
   "main": "main.ts",
-  "dependencies": {},
   "devDependencies": {
+    "@tsconfig/recommended": "^1.0.2",
     "@types/clean-css": "^4.2.1",
     "@types/node": "^12.7.8",
     "@types/uglify-js": "^3.0.4",
@@ -20,7 +20,7 @@
     "type": "git",
     "url": "git+https://github.com/SirZenith/cocos-webpage-packing.git"
   },
-  "author": "",
+  "author": "陆离",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/SirZenith/cocos-webpage-packing/issue"

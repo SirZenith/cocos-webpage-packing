@@ -7,13 +7,6 @@ System.constructor.prototype.shouldFetch = function(url) {
     }
 };
 
-const MIME_TYPE_MAP = {
-    js: "application/javascript",
-    json: "application/json",
-    css: "text/css",
-    wasm: "application/wasm",
-}
-
 // 优先加载打包资源，当没有对应资源时才进行请求
 function fetchHookFactory(origin) {
     return function(url, options) {

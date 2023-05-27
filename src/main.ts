@@ -5,15 +5,16 @@ import CleanCSS = require("clean-css")
 
 import config from "./config"
 
-function get_file_content(filepath: string): string {
-    const prompt = '    - ' + path.basename(filepath)
-    console.time(prompt)
-    let file = fs.readFileSync(filepath)
-    console.timeEnd(prompt)
+function get_file_content(filepath: string, key?: string): string {
+    key = key || path.basename(filepath)
+    const prompt = '    - ' + key;
+    console.time(prompt);
+    let file = fs.readFileSync(filepath);
+    console.timeEnd(prompt);
 
-    const ext = path.extname(filepath)
-    const need_compress = config.compress_target_extensions.has(ext)
-    return need_compress ? file.toString("base64") : file.toString()
+    const ext = path.extname(filepath);
+    const need_compress = config.compress_target_extensions.has(ext);
+    return need_compress ? file.toString("base64") : file.toString();
 }
 
 function ensure_output_dir() {
@@ -38,7 +39,7 @@ function get_all_child_file(filepath: string): string[] {
         children.forEach((child, i) => {
             if (fs.statSync(child).isDirectory()) {
                 delete children[i]
-                let child_children = fs.readdirSync(child).map(v => `${child}/${v}`)
+                let child_children = fs.readdirSync(child).map(v => path.join(child, v))
                 children.push(...child_children)
             }
         })
@@ -48,28 +49,20 @@ function get_all_child_file(filepath: string): string[] {
 
 function write_resjs(root_path: string, asset_path: string) {
     // 读取并写入到一个对象中
-    root_path = path.normalize(root_path)
-    asset_path = path.normalize(asset_path)
-    asset_path = path.join(root_path, asset_path)
+    root_path = path.normalize(root_path);
+    asset_path = path.join(root_path, asset_path);
+    asset_path = path.normalize(asset_path);
 
     const prefix = path.normalize(`${root_path}/`)
-    let res_object = {}
+    let res_object: Record<string, string> = {}
     get_all_child_file(asset_path).forEach(path => {
         // 注意,存储时删除BASE_PATH前置
-        let store_path = path.slice(prefix.length)
-        res_object[store_path] = get_file_content(path)
+        let store_path = path.slice(prefix.length).replace(/\\/g, "/")
+        res_object[store_path] = get_file_content(path, store_path)
     })
 
     for (const asset of config.special_asset) {
-        let store_path: string, source_path: string;
-        if (typeof asset === "string") {
-            store_path = asset
-            source_path = asset
-        } else {
-            store_path = asset.path
-            source_path = asset.sourcePath
-        }
-        res_object[store_path] = get_file_content(path.join(root_path, source_path))
+        res_object[asset] = get_file_content(path.join(root_path, asset))
     }
 
     const json = JSON.stringify(res_object, null, 4)
@@ -159,5 +152,9 @@ export function do_task(root_path: string) {
 }
 
 const args = process.argv.slice(2)
-const root_path = args.length > 0 ? args[0] : config.project_root_path;
-do_task(root_path)
+if (args.length > 0) {
+    do_task(args[0])
+} else {
+    console.error("请传入目标项目的根目录路径");
+    process.exit(1);
+}
