@@ -3,7 +3,10 @@
  */
 
 const config = {
-    compress_target_extensions: new Set([       // 需要使用base64编码的资源后缀(根据项目自行扩充)
+    // 资源使用 base64 编码后打包成的 JS 文件的输出路径。
+    output_res_js: "build/res.js",
+    // 需要使用 base64 进行编码的资源文件
+    compress_target_extensions: new Set([
         ".png", ".jpg", ".webp", ".mp3",
     ]),
     // 本脚本需要向输出 HTML 中添加的 JS 内容
@@ -17,41 +20,24 @@ const config = {
         "src/game-start-up.js",
     ],
 
-    // 资源使用 base64 编码后打包成的 JS 文件的输出路径。
-    output_res_js: "build/res.js",
     // 最终输出的 HTML 文件的路径。
     output_index_html: "dist/index.html",
 
-    // cocos creator 工程的 web-mobile 发布结果的根路径，
-    // 此参数亦可通过命令行传入。命令行参数具有更高的优先级。
-    project_root_path: "src/web-mobile",
-
-    // 构建结果的 index.html 的路径，路径为相对于项目根的相对路径。
+    // Cocos Creator 构建生成的 index.html 相对于项目根的路径。
     project_index_html: "index.html",
 
-    // 资源目录相对于项目根目录的相对路径。
+    // 资源目录相对于项目根目录的路径。
     asset_path: "./",
     // 指定使用某一路径储存在导出的资源路径中的内容
     // 形式为 { path: string, sourcePath: string }
-    special_asset: [
-        /*
-        "cocos-js/cc.js",
-        "index.js",
-        "application.js",
-        "src/import-map.json",
-        "src/chunks/bundle.js",
-        "src/polyfills.bundle.js",
-        "src/system.bundle.js",
-        "src/settings.json",
-        */
-    ],
+    special_asset: [],
 
-    // 项目中所有需要整合到输出 HTML 中的 CSS 文件，路径为相对于项目根的相对路径。
+    // 项目中所有需要整合到输出 HTML 中的 CSS 文件，路径为相对于项目根的路径。
     project_css_files: [
         "style.css"
     ],
 
-    // 项目中所有需要整合到输出的 HTML 中的 JS 文件，路径为相对于项目根的相对路径。
+    // 项目中所有需要整合到输出的 HTML 中的 JS 文件，路径为相对于项目根的路径。
     project_js_files: [
         "src/polyfills.bundle.js",
         "src/system.bundle.js",
