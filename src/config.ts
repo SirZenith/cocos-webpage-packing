@@ -1,17 +1,45 @@
-/** 一些配置参数
- * - [注意] 路径问题.start脚本与web-mobile同层级,因此相对路径需要带上web-mobile;cocos在调用资源时没有web-mobile,需要在最后去掉
- */
+export interface PackingConfig {
+    /** 资源使用 base64 编码后打包成的 JS 文件的输出路径。*/
+    output_res_js: string;
+    /** 需要使用 base64 进行编码的资源文件扩展名 */
+    compress_target_extensions: string[],
 
-const config = {
-    // 资源使用 base64 编码后打包成的 JS 文件的输出路径。
+    /** 需要在导出 HTML 中，引擎代码之前加入的 JS 文件的路径 */
+    pre_project_internal_js_files: string[],
+    /** 需要在导出 HTML 中，引擎代码之后加入的 JS 文件的路径 */
+    post_project_internal_js_files: string[],
+
+    /** 最终输出的 HTML 文件的路径? */
+    output_index_html: string,
+
+    /** Cocos Creator 构建生成的 index.html 相对于构建输出根目录的路径。*/
+    project_index_html: string,
+
+    /** 资源目录相对于构建输出根目录的路径 */
+    asset_path: string,
+    /** 指定使用某一路径储存在导出的资源路径中的内容。
+     * sourcePath 为源文件相对于构建输出根目录的路径；
+     * path 为在资源在资源打包输出中记录使用的路径。
+     */
+    special_assets: Array<{ path: string, sourcePath: string }>,
+
+    /** 构建输出中所有需要整合到输出 HTML 中的 CSS 文件的路径。
+     * 路径为相对于构建输出根目录的路径。
+     */
+    project_css_files: string[];
+
+    /** 项目中所有需要整合到输出的 HTML 中的 JS 文件。
+     * 路径为相对于构建输出根目录的路径。
+     */
+    project_js_files: Array<string | { src: string, type: string }>,
+}
+
+export const config: PackingConfig = {
     output_res_js: "build/res.js",
-    // 需要使用 base64 进行编码的资源文件
-    compress_target_extensions: new Set([
+    compress_target_extensions: [
         ".png", ".jpg", ".webp", ".mp3",
-    ]),
-    // 本脚本需要向输出 HTML 中添加的 JS 内容
-    pre_project_internal_js_files: [
     ],
+    pre_project_internal_js_files: [],
     post_project_internal_js_files: [
         "third-party/ajaxhook.min.js",
         "src/hooks/utils.js",
@@ -20,19 +48,13 @@ const config = {
         "src/game-start-up.js",
     ],
 
-    // 最终输出的 HTML 文件的路径。
     output_index_html: "dist/index.html",
 
-    // Cocos Creator 构建生成的 index.html 相对于项目根的路径。
     project_index_html: "index.html",
 
-    // 资源目录相对于项目根目录的路径。
     asset_path: "./",
-    // 指定使用某一路径储存在导出的资源路径中的内容
-    // 形式为 { path: string, sourcePath: string }
-    special_asset: [],
+    special_assets: [],
 
-    // 项目中所有需要整合到输出 HTML 中的 CSS 文件，路径为相对于项目根的路径。
     project_css_files: [
         "style.css"
     ],
@@ -47,5 +69,3 @@ const config = {
         },
     ],
 }
-
-export default config;
