@@ -208,6 +208,7 @@ const pack_project = (root_path: string): void => {
     });
 
     timed_task("输出最终文件", (): void => {
+        // 纯字符形式的 replace 调用会引起 cc.js 内容导出错误
         html = html.replace("</body>", () => {
             return '\n' + js_block_buffer.join('\n') + '\n</body>';
         });
