@@ -174,7 +174,10 @@ const pack_project = (root_path: string): void => {
     })
 
     timed_task("读取前置 JS", (): void => {
-        const pre_project_js_files = [config.output_res_js, ...config.pre_project_internal_js_files];
+        const pre_project_js_files = [
+            config.output_res_js,
+            ...config.pre_project_internal_js_files,
+        ];
 
         for (const filepath of pre_project_js_files) {
             const content = get_html_tag_by_js_file(filepath);

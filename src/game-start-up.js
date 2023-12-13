@@ -5,28 +5,34 @@ function startEngine(cc) {
     downloader.register({
         ".js": (url, _options, callback) => {
             eval(window.res[url]);
-            callback(null)
+            callback(null);
         },
         ".json": (url, _options, callback) => {
-            callback(null, JSON.parse(window.res[url]))
+            callback(null, JSON.parse(window.res[url]));
         },
         ".plist": (url, _options, callback) => {
-            callback(null, window.res[url])
+            callback(null, window.res[url]);
         },
         ".png": (url, _options, callback) => {
             var img = new Image()
-            img.src = "data:image/png;base64," + window.res[url]
-            callback(null, img)
+            img.onload = () => {
+                callback(null, img);
+            }
+            img.src = "data:image/png;base64," + window.res[url];
         },
         ".jpg": (url, _options, callback) => {
             var img = new Image()
-            img.src = "data:image/jpeg;base64," + window.res[url]
-            callback(null, img)
+            img.onload = () => {
+                callback(null, img);
+            }
+            img.src = "data:image/jpeg;base64," + window.res[url];
         },
         ".webp": (url, _options, callback) => {
             var img = new Image()
-            img.src = "data:image/webp;base64," + window.res[url]
-            callback(null, img)
+            img.onload = () => {
+                callback(null, img);
+            }
+            img.src = "data:image/webp;base64," + window.res[url];
         },
         ".mp3": (url, _options, callback) => {
             // 只支持以webAudio形式播放的声音
@@ -58,7 +64,7 @@ function startEngine(cc) {
             const jspath = `${url}/index.${version ? `${version}.` : ''}js`;
             const jsContent = window.res[jspath];
             if (jsContent === undefined) {
-                onComplete(new Error(`无法在打包的资源中找到 ${jspath}`))
+                onComplete(new Error(`无法在打包的资源中找到 ${jspath}`));
                 return;
             }
             eval(jsContent);
@@ -66,7 +72,7 @@ function startEngine(cc) {
             const config = `${url}/config.${version ? `${version}.` : ''}json`;
             const configContent = window.res[config];
             if (configContent === undefined) {
-                onComplete(new Error(`无法在打包的资源中找到 ${config}`))
+                onComplete(new Error(`无法在打包的资源中找到 ${config}`));
                 return;
             }
 
