@@ -17,7 +17,7 @@ const get_file_content = (filepath: string, key?: string): string => {
     const prompt = '    - ' + key;
 
     console.time(prompt);
-    let file = fs.readFileSync(filepath);
+    const file = fs.readFileSync(filepath);
     console.timeEnd(prompt);
 
     const ext = path.extname(filepath);
@@ -84,7 +84,7 @@ const write_resjs = (root: string, asset_path: string): void => {
     const prefix = path.normalize(`${root_path}/`);
     const asset_files = get_all_child_file(asset_path_full);
 
-    let res_object: Record<string, string> = {};
+    const res_object: Record<string, string> = {};
     for (const filepath of asset_files) {
         // 注意,存储时只保留相对路径部分
         let store_path = filepath.slice(prefix.length).replace(/\\/g, "/");
@@ -107,9 +107,9 @@ const write_resjs = (root: string, asset_path: string): void => {
  * @returns 脚本内容使用 script 标签包裹成的 HTML 文本
  */
 const get_html_tag_by_js_file = (filepath: string, type?: string): string => {
-    let js = get_file_content(filepath);
+    const js = get_file_content(filepath);
 
-    let min_js = uglify.minify(js).code;
+    const min_js = uglify.minify(js).code;
     const script_type = type || "text/javascript";
 
     const comment = `<!-- ${path.basename(filepath)} -->`;
@@ -122,9 +122,9 @@ const get_html_tag_by_js_file = (filepath: string, type?: string): string => {
  * @param filepath - CSS 文件的路径
  * @returns CSS 文件使用 style 标签包裹成的 HTML 文本
  */
-const get_html_code_by_css_file = (filepath: string): string => {
-    let css = get_file_content(filepath);
-    let min_css = new CleanCSS().minify(css).styles;
+const get_html_tag_by_css_file = (filepath: string): string => {
+    const css = get_file_content(filepath);
+    const min_css = new CleanCSS().minify(css).styles;
     return `<style>${min_css}</style>`;
 }
 
@@ -149,12 +149,10 @@ const pack_project = (root_path: string): void => {
     let html = "";
     const js_block_buffer: string[] = [];
 
-    // 资源打包
     timed_task("打包所有资源到单个文件", () => {
         write_resjs(root_path, config.asset_path);
     })
 
-    // 清理 HTML
     timed_task("读取项目 HTML 内容", () => {
         const html_path = path.join(root_path, config.project_index_html);
         html = get_file_content(html_path);
@@ -162,16 +160,17 @@ const pack_project = (root_path: string): void => {
         html = html.replace(/<script.*<\/script>/gs, "");
     })
 
-    // 写入css
     timed_task("写入所有css文件", () => {
         const css_content = config.project_css_files
             .map((css_file) => {
                 const filepath = path.join(root_path, css_file);
-                return get_html_code_by_css_file(filepath);
+                return get_html_tag_by_css_file(filepath);
             })
             .join('\n');
 
-        html = html.replace("</head>", '\n' + css_content + '\n</head>');
+        html = html.replace("</head>", () => {
+            return '\n' + css_content + '\n</head>';
+        });
     })
 
     timed_task("读取前置 JS", (): void => {
@@ -209,7 +208,9 @@ const pack_project = (root_path: string): void => {
     });
 
     timed_task("输出最终文件", (): void => {
-        html = html.replace("</body>", '\n' + js_block_buffer.join('\n') + '\n</body>');
+        html = html.replace("</body>", () => {
+            return '\n' + js_block_buffer.join('\n') + '\n</body>';
+        });
 
         timed_task("输出html文件", () => {
             fs.writeFileSync(config.output_index_html, html)
