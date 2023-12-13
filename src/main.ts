@@ -113,7 +113,7 @@ const get_html_tag_by_js_file = (filepath: string, type?: string): string => {
     const script_type = type || "text/javascript";
 
     const comment = `<!-- ${path.basename(filepath)} -->`;
-    const script_tag = `<script type="${script_type}">${min_js || js}</script>`;
+    const script_tag = `<script type="${script_type}" charset="utf-8">${min_js || js}</script>`;
 
     return comment + '\n' + script_tag;
 }
@@ -193,7 +193,7 @@ const pack_project = (root_path: string): void => {
                 js_block_buffer.push(content);
             } else {
                 const script_type = file_info.type || "text/javascript";
-                const content = `<script src=${file_info.src} type="${script_type}"></script>`
+                const content = `<script src="${file_info.src}" type="${script_type}" charset="utf-8"></script>`
                 js_block_buffer.push(content);
             }
         }

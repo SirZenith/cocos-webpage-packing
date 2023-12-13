@@ -28,9 +28,7 @@ function try_get_packed_resource(url) {
     return window.res[path];
 }
 
-/** 官网范例,反正看不懂
- * - https://developer.mozilla.org/zh-CN/docs/Web/API/WindowBase64/Base64_encoding_and_decoding#Solution_1_%E2%80%93_JavaScript's_UTF-16_%3E_base64
- */
+// https://developer.mozilla.org/zh-CN/docs/Web/API/WindowBase64/Base64_encoding_and_decoding#Solution_1_%E2%80%93_JavaScript's_UTF-16_%3E_base64
 function b64ToUint6(nChr) {
     return nChr > 64 && nChr < 91
         ? nChr - 65 : nChr > 96 && nChr < 123

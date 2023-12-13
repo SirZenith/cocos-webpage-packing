@@ -1,6 +1,6 @@
-const REGEX = /^(?:\w+:\/\/|\.+\/).+/;
-
 function startEngine(cc) {
+    const REGEX = /^(?:\w+:\/\/|\.+\/).+/;
+
     const downloader = cc.assetManager.downloader;
     downloader.register({
         ".js": (url, _options, callback) => {
