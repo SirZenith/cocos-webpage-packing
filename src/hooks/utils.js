@@ -4,6 +4,7 @@ const MIME_TYPE_MAP = {
     json: "application/json",
     css: "text/css",
     wasm: "application/wasm",
+    arraybuffer: "application/octet-stream",
 }
 
 const RESOURCE_URL_PREFIX = `${window.location.protocol}//${window.location.host}/`;
