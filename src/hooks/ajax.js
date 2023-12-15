@@ -1,20 +1,3 @@
-const resource_post_progress = (res, respType) => {
-    let data = res;
-
-    switch (respType) {
-        case "json":
-            data = JSON.parse(res);
-            break;
-        case "arraybuffer":
-            data = base64DecToArr(res).buffer;
-            break;
-        default:
-            break;
-    }
-
-    return data;
-}
-
 ah.proxy({
     onRequest: (config, handler) => {
         const url = config.url || '';

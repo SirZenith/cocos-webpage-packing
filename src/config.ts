@@ -43,6 +43,7 @@ export const config: PackingConfig = {
         ".mp3",
         ".cconb",
         ".ttf",
+        ".otf",
     ],
     pre_project_internal_js_files: [],
     post_project_internal_js_files: [

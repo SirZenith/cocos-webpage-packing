@@ -56,4 +56,19 @@ function base64DecToArr(sBase64, nBlockSize) {
     return aBytes
 }
 
+const resource_post_progress = (res, respType) => {
+    let data = res;
 
+    switch (respType) {
+        case "json":
+            data = JSON.parse(res);
+            break;
+        case "arraybuffer":
+            data = base64DecToArr(res).buffer;
+            break;
+        default:
+            break;
+    }
+
+    return data;
+}
