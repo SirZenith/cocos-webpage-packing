@@ -37,7 +37,12 @@ export interface PackingConfig {
 export const config: PackingConfig = {
     output_res_js: "build/res.js",
     compress_target_extensions: [
-        ".png", ".jpg", ".webp", ".mp3", ".cconb",
+        ".png",
+        ".jpg",
+        ".webp",
+        ".mp3",
+        ".cconb",
+        ".ttf",
     ],
     pre_project_internal_js_files: [],
     post_project_internal_js_files: [
@@ -45,6 +50,7 @@ export const config: PackingConfig = {
         "src/hooks/utils.js",
         "src/hooks/systemjs.js",
         "src/hooks/ajax.js",
+        "src/hooks/fontloader.js",
         "src/game-start-up.js",
     ],
 

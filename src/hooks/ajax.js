@@ -33,7 +33,7 @@ ah.proxy({
                 response: resource_post_progress(res, respType),
             })
         } else {
-            console.log("loading remote asset", url);
+            console.log("ajax - loading remote asset", url);
 
             handler.next(config);
         }
