@@ -37,7 +37,7 @@ export interface PackingConfig {
 export const config: PackingConfig = {
     output_res_js: "build/res.js",
     compress_target_extensions: [
-        ".png", ".jpg", ".webp", ".mp3",
+        ".png", ".jpg", ".webp", ".mp3", ".cconb",
     ],
     pre_project_internal_js_files: [],
     post_project_internal_js_files: [

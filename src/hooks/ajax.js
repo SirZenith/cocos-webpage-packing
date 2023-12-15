@@ -1,16 +1,40 @@
+const resource_post_progress = (res, respType) => {
+    let data = res;
+
+    switch (respType) {
+        case "json":
+            data = JSON.parse(res);
+            break;
+        case "arraybuffer":
+            data = base64DecToArr(res).buffer;
+            break;
+        default:
+            break;
+    }
+
+    return data;
+}
+
 ah.proxy({
     onRequest: (config, handler) => {
-        const res = window.res[config.url];
-        if (res !== undefined) {
+        const url = config.url || '';
+        const res = window.res[url];
+
+        if (typeof res !== "undefined") {
+            console.log('ajax - loading packed asset', url);
+
             const respType = config.xhr.responseType;
             const content_type = MIME_TYPE_MAP[respType] || "text/text";
+
             handler.resolve({
                 config: config,
                 status: 200,
                 headers: { "content-type": content_type },
-                response: respType === "json" ? JSON.parse(res) : res,
+                response: resource_post_progress(res, respType),
             })
         } else {
+            console.log("loading remote asset", url);
+
             handler.next(config);
         }
     },

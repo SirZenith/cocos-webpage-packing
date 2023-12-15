@@ -1,5 +1,20 @@
-function startEngine(cc) {
+function start_engine(cc) {
     const REGEX = /^(?:\w+:\/\/|\.+\/).+/;
+
+    const load_image = (format, url, callback) => {
+        const content = window.res[url];
+
+        if (!content) {
+            callback(new Error("no resource found"), null);
+            return;
+        }
+
+        var img = new Image()
+        img.onload = () => {
+            callback(null, img);
+        }
+        img.src = `data:image/${format};base64,${content}`;
+    };
 
     const downloader = cc.assetManager.downloader;
     downloader.register({
@@ -14,25 +29,13 @@ function startEngine(cc) {
             callback(null, window.res[url]);
         },
         ".png": (url, _options, callback) => {
-            var img = new Image()
-            img.onload = () => {
-                callback(null, img);
-            }
-            img.src = "data:image/png;base64," + window.res[url];
+            load_image('png', url, callback);
         },
         ".jpg": (url, _options, callback) => {
-            var img = new Image()
-            img.onload = () => {
-                callback(null, img);
-            }
-            img.src = "data:image/jpeg;base64," + window.res[url];
+            load_image('jpeg', url, callback);
         },
         ".webp": (url, _options, callback) => {
-            var img = new Image()
-            img.onload = () => {
-                callback(null, img);
-            }
-            img.src = "data:image/webp;base64," + window.res[url];
+            load_image('webp', url, callback);
         },
         ".mp3": (url, _options, callback) => {
             // 只支持以webAudio形式播放的声音
@@ -87,5 +90,5 @@ function startEngine(cc) {
 }
 
 System.import("cc")
-    .then(startEngine)
+    .then(start_engine)
     .catch((err) => console.error(`引擎加载失败：${err}`));
