@@ -1,36 +1,42 @@
-const originShouldFetch = System.constructor.prototype.shouldFetch;
-System.constructor.prototype.shouldFetch = function(url) {
-    if (try_get_packed_resource(url) !== undefined) {
-        return true;
-    } else {
-        return originShouldFetch(arg);
-    }
-};
+{
+    const prototype = Object.getPrototypeOf(System);
 
-// 优先加载打包资源，当没有对应资源时才进行请求
-function fetchHookFactory(origin) {
-    return function(url, options) {
-        const res = try_get_packed_resource(url);
+    // 在打包资源中存在的路径不需要通过请求获取内容
+    const originShouldFetch = prototype.shouldFetch;
+    prototype.shouldFetch = function(url) {
+        if (try_get_packed_resource(url) !== undefined) {
+            return true;
+        } else {
+            return originShouldFetch(arg);
+        }
+    };
 
-        if (res !== undefined) {
+    // 优先加载打包资源，当没有对应资源时才进行请求
+    function fetchHookFactory(origin) {
+        return (url, options) => {
+            const res = try_get_packed_resource(url);
+
+            if (typeof res === "undefined") {
+                console.log("systemjs - loading remote resource:", url);
+
+                return origin(url, options)
+            }
+
             console.log("systemjs - loading packed resource:", url);
 
-            const ext = url.split(".").pop();
-            return new Promise(function(resolve, _reject) {
+            return new Promise((resolve, _reject) => {
+                const ext = url.split(".").pop();
                 const resp = new Response(res, {
                     headers: {
                         "Content-Type": MIME_TYPE_MAP[ext],
                     }
                 });
+
                 resolve(resp);
             });
-        } else {
-            console.log("systemjs - loading remote resource:", url);
-
-            return origin(url, options)
         }
     }
-}
 
-window.fetch = fetchHookFactory(window.fetch);
-System.constructor.prototype.fetch = fetchHookFactory(System.constructor.prototype.fetch);
+    window.fetch = fetchHookFactory(window.fetch);
+    prototype.fetch = fetchHookFactory(prototype.fetch);
+}

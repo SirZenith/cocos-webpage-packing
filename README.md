@@ -6,6 +6,7 @@
 
 - 将项目所有文件打包为变量 `window.res` 封装至 `index.html` 的 `script` 标签中。
 - 通过 hook AJAX 请求和 SystemJS 加载文件的过程，使得文件请求指向 `window.res` 中的数据。
+- Hook 字体加载的 FontFaceSet API，尽可能用已打包的资源创建字体。
 - 设定 `cc.assetManager.downloader` 使 `cc` 的资源请求指向 `window.res` 中的数据。
 
 ## 使用

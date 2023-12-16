@@ -86,7 +86,7 @@ window.addEventListener("load", () => {
         prototype.load = function() {
             const font_family = this.family.replace(/^['"]/, "").replace(/['"]$/, "");
             const url = find_font_url_among_rules(font_family);
-            const res = window.res[url];
+            const res = try_get_packed_resource(url);
 
             if (res) {
                 console.log("FontFace - loading packed font:", url);
@@ -151,10 +151,10 @@ window.addEventListener("load", () => {
             if (face) {
                 face.load().then(
                     () => {
-                        console.log("font loaded:", font_family);
+                        console.log("FontFaceSet - font loaded:", font_family);
                     },
                     (err) => {
-                        console.log("failed to load font", err);
+                        console.log("FontFaceSet - failed to load font", err);
                     },
                 );
             } else {

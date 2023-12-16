@@ -1,36 +1,8 @@
-const MIME_TYPE_MAP = {
-    text: "text/text",
-    js: "application/javascript",
-    json: "application/json",
-    css: "text/css",
-    wasm: "application/wasm",
-    arraybuffer: "application/octet-stream",
-}
-
-const RESOURCE_URL_PREFIX = `${window.location.protocol}//${window.location.host}/`;
-const RESOURCE_PATH_PREFIX = (() => {
-    const segments = window.location.pathname.split('/');
-    segments.pop();
-    return "file://" + segments.join('/') + '/';
-})();
-
-function try_get_packed_resource(url) {
-    if (typeof url !== "string") {
-        return undefined;
-    }
-
-    // 远程主机名为空的 file:// 协议请求是访问本地文件
-    const isLocalFile = url.startsWith("file:///")
-    const prefix = isLocalFile
-        ? RESOURCE_PATH_PREFIX
-        : RESOURCE_URL_PREFIX;
-    const path = url.slice(prefix.length);
-
-    return window.res[path];
-}
+// ----------------------------------------------------------------------------
+// base64 编解码
 
 // https://developer.mozilla.org/zh-CN/docs/Web/API/WindowBase64/Base64_encoding_and_decoding#Solution_1_%E2%80%93_JavaScript's_UTF-16_%3E_base64
-function b64ToUint6(nChr) {
+const b64ToUint6 = (nChr) => {
     return nChr > 64 && nChr < 91
         ? nChr - 65 : nChr > 96 && nChr < 123
             ? nChr - 71 : nChr > 47 && nChr < 58
@@ -39,7 +11,7 @@ function b64ToUint6(nChr) {
                         ? 63 : 0
 }
 
-function base64DecToArr(sBase64, nBlockSize) {
+const base64DecToArr = (sBase64, nBlockSize) => {
     var sB64Enc = sBase64.replace(/[^A-Za-z0-9\+\/]/g, ""), nInLen = sB64Enc.length
     var nOutLen = nBlockSize ? Math.ceil((nInLen * 3 + 1 >>> 2) / nBlockSize) * nBlockSize : nInLen * 3 + 1 >>> 2
     var aBytes = new Uint8Array(nOutLen)
@@ -54,6 +26,46 @@ function base64DecToArr(sBase64, nBlockSize) {
         }
     }
     return aBytes
+}
+
+// ----------------------------------------------------------------------------
+
+const MIME_TYPE_MAP = {
+    text: "text/text",
+    js: "application/javascript",
+    json: "application/json",
+    css: "text/css",
+    wasm: "application/wasm",
+    arraybuffer: "application/octet-stream",
+}
+
+const RESOURCE_URL_PREFIX = `${window.location.protocol}//${window.location.host}/`;
+const RESOURCE_PATH_PREFIX = (() => {
+    const segments = window.location.pathname.split("/");
+    segments.pop();
+    return "file://" + segments.join("/") + "/";
+})();
+const RESOURCE_ROOT_RELATIVE_PREFIX = "/";
+
+const try_get_packed_resource = (url) => {
+    if (typeof url !== "string") {
+        return undefined;
+    }
+
+    let prefix = "";
+    if (url.startsWith("/")) {
+        // 相对于网址根目录的文件
+        prefix = RESOURCE_ROOT_RELATIVE_PREFIX;
+    } else if (url.startsWith("file:///")) {
+        // 远程主机名为空的 file:// 协议请求是访问本地文件
+        prefix = RESOURCE_PATH_PREFIX;
+    } else if (url.startsWith(RESOURCE_URL_PREFIX)) {
+        prefix = RESOURCE_URL_PREFIX;
+    }
+
+    const path = url.slice(prefix.length);
+
+    return window.res[path];
 }
 
 const resource_post_progress = (res, respType) => {

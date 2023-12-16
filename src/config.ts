@@ -48,11 +48,11 @@ export const config: PackingConfig = {
     pre_project_internal_js_files: [],
     post_project_internal_js_files: [
         "third-party/ajaxhook.min.js",
-        "src/hooks/utils.js",
+        "src/utils/utils.js",
         "src/hooks/systemjs.js",
         "src/hooks/ajax.js",
         "src/hooks/fontloader.js",
-        "src/game-start-up.js",
+        "src/utils/game-start-up.js",
     ],
 
     output_index_html: "dist/index.html",
