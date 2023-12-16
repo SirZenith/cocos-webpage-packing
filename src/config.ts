@@ -66,7 +66,6 @@ export const config: PackingConfig = {
         "style.css"
     ],
 
-    // 项目中所有需要整合到输出的 HTML 中的 JS 文件，路径为相对于项目根的路径。
     project_js_files: [
         "src/polyfills.bundle.js",
         "src/system.bundle.js",
