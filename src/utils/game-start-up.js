@@ -7,10 +7,10 @@ window.addEventListener("load", () => {
             return;
         }
 
-        var img = new Image()
+        var img = new Image();
         img.onload = () => {
             callback(null, img);
-        }
+        };
         img.src = `data:image/${format};base64,${content}`;
     };
 
@@ -30,13 +30,13 @@ window.addEventListener("load", () => {
             callback(null, url);
         },
         ".png": (_cc, url, _options, callback) => {
-            load_image('png', url, callback);
+            load_image("png", url, callback);
         },
         ".jpg": (_cc, url, _options, callback) => {
-            load_image('jpeg', url, callback);
+            load_image("jpeg", url, callback);
         },
         ".webp": (_cc, url, _options, callback) => {
-            load_image('webp', url, callback);
+            load_image("webp", url, callback);
         },
         ".mp3": (cc, url, _options, callback) => {
             const content = try_get_packed_resource(url);
@@ -53,7 +53,7 @@ window.addEventListener("load", () => {
                 (_buffer) => {
                     callback(new Error("mp3-res-fail"), null);
                 }
-            )
+            );
         },
         bundle: (cc, nameOrUrl, options, onComplete) => {
             const downloader = cc.assetManager.downloader;
@@ -69,7 +69,7 @@ window.addEventListener("load", () => {
             }
             const version = options.version || downloader.bundleVers[bundleName];
 
-            const jspath = `${url}/index.${version ? `${version}.` : ''}js`;
+            const jspath = `${url}/index.${version ? `${version}.` : ""}js`;
             const jsContent = try_get_packed_resource(jspath);
             if (jsContent === undefined) {
                 onComplete(new Error(`无法在打包的资源中找到 ${jspath}`));
@@ -78,7 +78,7 @@ window.addEventListener("load", () => {
 
             eval(jsContent);
 
-            const config = `${url}/config.${version ? `${version}.` : ''}json`;
+            const config = `${url}/config.${version ? `${version}.` : ""}json`;
             const configContent = try_get_packed_resource(config);
             if (configContent === undefined) {
                 onComplete(new Error(`无法在打包的资源中找到 ${config}`));
@@ -90,7 +90,7 @@ window.addEventListener("load", () => {
 
             onComplete(null, configOut);
         },
-    }
+    };
 
     const registering_downloaders = (cc) => {
         const downloaders = {};
@@ -99,15 +99,15 @@ window.addEventListener("load", () => {
         }
 
         cc.assetManager.downloader.register(downloaders);
-    }
+    };
 
     const start_engine = (cc) => {
         registering_downloaders(cc);
 
-        System.import('./index.js').catch((err) => console.error(err));
-    }
+        System.import("./index.js").catch((err) => console.error(err));
+    };
 
     System.import("cc")
         .then(start_engine)
         .catch((err) => console.error(`引擎加载失败：${err}`));
-})
+});

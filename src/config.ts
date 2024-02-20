@@ -2,26 +2,26 @@ export interface PackingConfig {
     /** 资源使用 base64 编码后打包成的 JS 文件的输出路径。*/
     output_res_js: string;
     /** 需要使用 base64 进行编码的资源文件扩展名 */
-    compress_target_extensions: string[],
+    compress_target_extensions: string[];
 
     /** 需要在导出 HTML 中，引擎代码之前加入的 JS 文件的路径 */
-    pre_project_internal_js_files: string[],
+    pre_project_internal_js_files: string[];
     /** 需要在导出 HTML 中，引擎代码之后加入的 JS 文件的路径 */
-    post_project_internal_js_files: string[],
+    post_project_internal_js_files: string[];
 
     /** 最终输出的 HTML 文件的路径? */
-    output_index_html: string,
+    output_index_html: string;
 
     /** Cocos Creator 构建生成的 index.html 相对于构建输出根目录的路径。*/
-    project_index_html: string,
+    project_index_html: string;
 
     /** 资源目录相对于构建输出根目录的路径 */
-    asset_path: string,
+    asset_path: string;
     /** 指定使用某一路径储存在导出的资源路径中的内容。
      * sourcePath 为源文件相对于构建输出根目录的路径；
      * path 为在资源在资源打包输出中记录使用的路径。
      */
-    special_assets: Array<{ path: string, sourcePath: string }>,
+    special_assets: Array<{ path: string; sourcePath: string }>;
 
     /** 构建输出中所有需要整合到输出 HTML 中的 CSS 文件的路径。
      * 路径为相对于构建输出根目录的路径。
@@ -31,7 +31,7 @@ export interface PackingConfig {
     /** 项目中所有需要整合到输出的 HTML 中的 JS 文件。
      * 路径为相对于构建输出根目录的路径。
      */
-    project_js_files: Array<string | { src: string, type: string }>,
+    project_js_files: Array<string | { src: string; type: string }>;
 }
 
 export const config: PackingConfig = {
@@ -62,9 +62,7 @@ export const config: PackingConfig = {
     asset_path: "./",
     special_assets: [],
 
-    project_css_files: [
-        "style.css"
-    ],
+    project_css_files: ["style.css"],
 
     project_js_files: [
         "src/polyfills.bundle.js",
@@ -74,4 +72,4 @@ export const config: PackingConfig = {
             type: "systemjs-importmap",
         },
     ],
-}
+};

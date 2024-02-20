@@ -19,7 +19,7 @@
             if (typeof res === "undefined") {
                 console.log("systemjs - loading remote resource:", url);
 
-                return origin(url, options)
+                return origin(url, options);
             }
 
             console.log("systemjs - loading packed resource:", url);
@@ -34,7 +34,7 @@
 
                 resolve(resp);
             });
-        }
+        };
     }
 
     window.fetch = fetchHookFactory(window.fetch);

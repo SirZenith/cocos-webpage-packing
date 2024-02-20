@@ -8,25 +8,25 @@ const b64ToUint6 = (nChr) => {
             ? nChr - 71 : nChr > 47 && nChr < 58
                 ? nChr + 4 : nChr === 43
                     ? 62 : nChr === 47
-                        ? 63 : 0
-}
+                        ? 63 : 0;
+};
 
 const base64DecToArr = (sBase64, nBlockSize) => {
-    var sB64Enc = sBase64.replace(/[^A-Za-z0-9\+\/]/g, ""), nInLen = sB64Enc.length
-    var nOutLen = nBlockSize ? Math.ceil((nInLen * 3 + 1 >>> 2) / nBlockSize) * nBlockSize : nInLen * 3 + 1 >>> 2
-    var aBytes = new Uint8Array(nOutLen)
+    var sB64Enc = sBase64.replace(/[^A-Za-z0-9\+\/]/g, ""), nInLen = sB64Enc.length;
+    var nOutLen = nBlockSize ? Math.ceil((nInLen * 3 + 1 >>> 2) / nBlockSize) * nBlockSize : nInLen * 3 + 1 >>> 2;
+    var aBytes = new Uint8Array(nOutLen);
     for (var nMod3, nMod4, nUint24 = 0, nOutIdx = 0, nInIdx = 0; nInIdx < nInLen; nInIdx++) {
-        nMod4 = nInIdx & 3
-        nUint24 |= b64ToUint6(sB64Enc.charCodeAt(nInIdx)) << 18 - 6 * nMod4
+        nMod4 = nInIdx & 3;
+        nUint24 |= b64ToUint6(sB64Enc.charCodeAt(nInIdx)) << 18 - 6 * nMod4;
         if (nMod4 === 3 || nInLen - nInIdx === 1) {
             for (nMod3 = 0; nMod3 < 3 && nOutIdx < nOutLen; nMod3++, nOutIdx++) {
                 aBytes[nOutIdx] = nUint24 >>> (16 >>> nMod3 & 24) & 255;
             }
-            nUint24 = 0
+            nUint24 = 0;
         }
     }
-    return aBytes
-}
+    return aBytes;
+};
 
 // ----------------------------------------------------------------------------
 
@@ -37,7 +37,7 @@ const MIME_TYPE_MAP = {
     css: "text/css",
     wasm: "application/wasm",
     arraybuffer: "application/octet-stream",
-}
+};
 
 const RESOURCE_URL_PREFIX = `${window.location.protocol}//${window.location.host}/`;
 const RESOURCE_PATH_PREFIX = (() => {
@@ -66,21 +66,21 @@ const try_get_packed_resource = (url) => {
     const path = url.slice(prefix.length);
 
     return window.res[path];
-}
+};
 
 const resource_post_progress = (res, respType) => {
     let data = res;
 
     switch (respType) {
-        case "json":
-            data = JSON.parse(res);
-            break;
-        case "arraybuffer":
-            data = base64DecToArr(res).buffer;
-            break;
-        default:
-            break;
+    case "json":
+        data = JSON.parse(res);
+        break;
+    case "arraybuffer":
+        data = base64DecToArr(res).buffer;
+        break;
+    default:
+        break;
     }
 
     return data;
-}
+};

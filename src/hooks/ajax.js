@@ -20,6 +20,6 @@ ah.proxy({
             status: 200,
             headers: { "content-type": content_type },
             response: resource_post_progress(res, respType),
-        })
+        });
     },
-})
+});

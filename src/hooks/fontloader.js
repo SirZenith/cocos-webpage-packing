@@ -12,7 +12,7 @@ window.addEventListener("load", () => {
         }
 
         return family.replace(/^['"]/, "").replace(/['"]$/, "");
-    }
+    };
 
     const get_css_rule_font_url = (cssRule) => {
         const src = cssRule.style.getPropertyValue("src");
@@ -26,7 +26,7 @@ window.addEventListener("load", () => {
         }
 
         return url;
-    }
+    };
 
     const find_css_rule_by_font_family = (font_family) => {
         let result = null;
@@ -47,7 +47,7 @@ window.addEventListener("load", () => {
         }
 
         return result;
-    }
+    };
 
     const find_font_url_among_rules = (font_family) => {
         const rule = find_css_rule_by_font_family(font_family);
@@ -63,7 +63,7 @@ window.addEventListener("load", () => {
         }
 
         return url;
-    }
+    };
 
     /**
      * Wrap `load` method of FontFace. Use base64 data in packed resource to
@@ -106,10 +106,10 @@ window.addEventListener("load", () => {
                 return old_load.call(this,);
             }
 
-        }
+        };
 
         font_face_hooked = true;
-    }
+    };
 
     const get_font_face_by_family_name = (family) => {
         let result = null;
@@ -125,7 +125,7 @@ window.addEventListener("load", () => {
         }
 
         return result;
-    }
+    };
 
     /**
      * Wrap `load` method of FontFaceSet. Redirect loading job to FontFace object
@@ -161,8 +161,8 @@ window.addEventListener("load", () => {
                 old_load.call(this, fontspec);
             }
 
-        }
-    }
+        };
+    };
 
     hook_font_face_set();
 }, false);
